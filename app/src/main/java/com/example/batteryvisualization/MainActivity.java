@@ -1,13 +1,16 @@
 package com.example.batteryvisualization;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,8 +23,12 @@ import android.graphics.drawable.Drawable;
 
 import android.appwidget.AppWidgetHost;
 import android.os.BatteryManager;
+import android.os.PowerManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Map;
+
 /*
 Created by Bobby Garza using PhilJay MPAndroidChart
 
@@ -29,7 +36,9 @@ Created by Bobby Garza using PhilJay MPAndroidChart
 public class MainActivity extends AppCompatActivity {
     //https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/main/java/com/xxmassdeveloper/mpchartexample/BarChartActivity.java
     private BarChart chart;
+    private StatHolder statHolder = new StatHolder(0,0);
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setTypeface(normal);
         setContentView(R.layout.activity_main);
         chart = findViewById(R.id.barchart);
+        getStats();
         graph();
     }
 
@@ -54,9 +64,24 @@ public class MainActivity extends AppCompatActivity {
         return batteryPct;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    //https://medium.com/@quiro91/show-app-usage-with-usagestatsmanager-d47294537dab for usageStats help
     public void getStats(){
-        UsageStatsManager mUsageStatsManager;
-        //collect user data here...
+        //TODO - populate statholder to contain the battery level and on screen time
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        long startTime = System.currentTimeMillis();
+        long endTime = 0;
+        long finish;
+        long aggregateTime = 0;
+        while(pm.isInteractive()){ //while the screen is on ->
+            endTime = System.currentTimeMillis();
+        }
+        finish = endTime - startTime;
+        aggregateTime += finish;
+        statHolder.aggregateTime(this.statHolder,aggregateTime);
+        statHolder.setBatteryLevel(this.statHolder,getData());
+
 
     }
 
