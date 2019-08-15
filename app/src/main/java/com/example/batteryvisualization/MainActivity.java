@@ -19,15 +19,15 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
-import android.graphics.drawable.Drawable;
-
 import android.appwidget.AppWidgetHost;
 import android.os.BatteryManager;
 import android.os.PowerManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Map;
+
 
 /*
 Created by Bobby Garza using PhilJay MPAndroidChart
@@ -50,7 +50,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         chart = findViewById(R.id.barchart);
         getStats();
-        graph();
+        //graph();
+        TextView batteryLevel = findViewById(R.id.battLvl);
+        TextView onScreenTime = findViewById(R.id.onScreenTime);
+
+        batteryLevel.setText(Float.toString(getData()) + "%");
+        onScreenTime.setText(Long.toString(statHolder.screenTime) + " minutes of on screen time");
+        Button button = findViewById(R.id.refreshButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView batteryLevel = findViewById(R.id.battLvl);
+                TextView onScreenTime = findViewById(R.id.onScreenTime);
+
+                batteryLevel.setText(Float.toString(getData()) + "%");
+                onScreenTime.setText(Long.toString(statHolder.screenTime) + " minutes of on screen time");
+            }
+        });
     }
 
     public float getData(){
